@@ -18,7 +18,7 @@ const PostCard = ({ post }) => {
         </Card.Content>
         <Card.Content extra>
           <Button as='div' labelPosition='right'>
-            <Button color='red'>
+            <Button color='red' basic>
               <Icon name='heart' />
             </Button>
             <Label as='a' basic color='red' pointing='left'>
