@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery, gql } from "@apollo/client";
-import { Grid, Container } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 
 import "./Home.css";
 import PostCard from "../../components/PostCard/PostCard";
+import { AuthContext } from "../../context/auth";
 
-const FETCH_POSTS = gql`
+const FETCH_POSTS_QUERY = gql`
   query GetPosts {
     getPosts {
       id
@@ -30,8 +31,9 @@ const FETCH_POSTS = gql`
 `;
 
 const Home = () => {
-  const { loading, error, data: { getPosts } = {} } = useQuery(FETCH_POSTS); // Compare with original code!
-
+  const context = useContext(AuthContext);
+  const { loading, data: { getPosts } = {} } = useQuery(FETCH_POSTS_QUERY); // Compare with original code!
+  console.log(context.userData);
   return (
     <div className='home'>
       <Grid columns={3}>
@@ -43,7 +45,7 @@ const Home = () => {
             <h2>Loading...</h2>
           ) : (
             getPosts.map((post) => (
-              <Grid.Column>
+              <Grid.Column key={post.id}>
                 <PostCard post={post} />
               </Grid.Column>
             ))
