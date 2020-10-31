@@ -4,6 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 
 import "./InputCommentForm.css";
 import { useForm } from "../../../utils/hooks";
+import InfoPopup from "../../../components/InfoPopup/InfoPopup";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation CreateComment($postId: ID!, $body: String!) {
@@ -63,9 +64,15 @@ const InputComment = ({ postId }) => {
           className='inputComment'
           ref={inputRef}
         />
-        <Button type='submit' color='teal' floated='right'>
-          Submit
-        </Button>
+        <InfoPopup content='Submit comment'>
+          <Button
+            type='submit'
+            color='teal'
+            floated='right'
+            disabled={values.comment.trim() === ""}>
+            Submit
+          </Button>
+        </InfoPopup>
       </div>
     </Form>
   );

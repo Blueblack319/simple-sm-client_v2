@@ -5,6 +5,7 @@ import { Button, Card, Form, Message } from "semantic-ui-react";
 import "./PostForm.css";
 import { useForm } from "../../utils/hooks";
 import { FETCH_POSTS_QUERY } from "../../utils/graphql";
+import InfoPopup from "../InfoPopup/InfoPopup";
 
 const CREATE_POST_MUTATION = gql`
   mutation CreatePost($body: String!) {
@@ -66,9 +67,14 @@ const PostForm = () => {
               value={values.body}
               name='body'
             />
-            <Button type='submit' color='teal'>
-              Submit
-            </Button>
+            <InfoPopup content='Submit Post'>
+              <Button
+                type='submit'
+                color='teal'
+                disabled={values.body.trim() === ""}>
+                Submit
+              </Button>
+            </InfoPopup>
           </Form>
         </Card.Content>
       </Card>

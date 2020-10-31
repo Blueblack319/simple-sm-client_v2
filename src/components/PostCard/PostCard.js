@@ -7,6 +7,7 @@ import "./PostCard.css";
 import { FETCH_POSTS_QUERY } from "../../utils/graphql";
 import { AuthContext } from "../../context/auth";
 import { Link } from "react-router-dom";
+import InfoPopup from "../InfoPopup/InfoPopup";
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePost($postId: ID!) {
@@ -56,39 +57,49 @@ const PostCard = ({ post, imageSrc }) => {
         <Card.Content>
           {imageSrc && <Image floated='right' size='mini' src={imageSrc} />}
           <Card.Header>{post.userName}</Card.Header>
-          <Card.Meta as={Link} to={`/posts/${post.id}`}>
-            {moment(post.createdAt).fromNow(true)}
-          </Card.Meta>
+          <InfoPopup content='Go to Post'>
+            <Card.Meta as={Link} to={`/posts/${post.id}`}>
+              {moment(post.createdAt).fromNow(true)}
+            </Card.Meta>
+          </InfoPopup>
           <Card.Description>{post.body}</Card.Description>
         </Card.Content>
         <Card.Content extra>
           <Button as='div' labelPosition='right' onClick={likePost}>
             {userData &&
             post.likes.find((like) => like.userName === userData.userName) ? (
-              <Button color='red'>
-                <Icon name='heart' />
-              </Button>
+              <InfoPopup content='Unlike Post'>
+                <Button color='red'>
+                  <Icon name='heart' />
+                </Button>
+              </InfoPopup>
             ) : (
-              <Button color='red' basic>
-                <Icon name='heart' />
-              </Button>
+              <InfoPopup content='Like Post'>
+                <Button color='red' basic>
+                  <Icon name='heart' />
+                </Button>
+              </InfoPopup>
             )}
             <Label as='a' basic color='red' pointing='left'>
               {post.likesCount}
             </Label>
           </Button>
-          <Button as={Link} labelPosition='right' to={`/posts/${post.id}`}>
-            <Button basic color='blue'>
-              <Icon name='comments' />
+          <InfoPopup content='Show Comment'>
+            <Button as={Link} labelPosition='right' to={`/posts/${post.id}`}>
+              <Button basic color='blue'>
+                <Icon name='comments' />
+              </Button>
+              <Label as='a' basic color='blue' pointing='left'>
+                {post.commentsCount}
+              </Label>
             </Button>
-            <Label as='a' basic color='blue' pointing='left'>
-              {post.commentsCount}
-            </Label>
-          </Button>
+          </InfoPopup>
           {userData && userData.userName === post.userName && (
-            <Button color='red' floated='right' onClick={deletePost}>
-              <Icon name='trash' />
-            </Button>
+            <InfoPopup content='Delete Post'>
+              <Button color='red' floated='right' onClick={deletePost}>
+                <Icon name='trash' />
+              </Button>
+            </InfoPopup>
           )}
         </Card.Content>
       </Card>

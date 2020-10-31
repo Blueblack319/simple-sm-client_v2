@@ -5,6 +5,7 @@ import moment from "moment";
 
 import "./Comment.css";
 import { AuthContext } from "../../../context/auth";
+import InfoPopup from "../../../components/InfoPopup/InfoPopup";
 
 const DELETE_COMMENT_MUTATION = gql`
   mutation DeleteComment($postId: ID!, $commentId: ID!) {
@@ -44,9 +45,11 @@ const Comment = ({ comment, postId }) => {
         <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
         <Card.Description>{comment.body}</Card.Description>
         {userData && userData.userName === comment.userName && (
-          <Button color='red' floated='right' onClick={deleteComment}>
-            <Icon name='trash' />
-          </Button>
+          <InfoPopup content='Delete Comment'>
+            <Button color='red' floated='right' onClick={deleteComment}>
+              <Icon name='trash' />
+            </Button>
+          </InfoPopup>
         )}
       </Card.Content>
     </Card>
