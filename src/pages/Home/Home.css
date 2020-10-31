@@ -1,3 +1,7 @@
 .home .column {
   margin-bottom: 20px !important;
 }
+
+.home__title {
+  margin: 0 auto !important;
+}

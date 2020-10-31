@@ -6,6 +6,7 @@ import { gql, useMutation } from "@apollo/client";
 import "./PostCard.css";
 import { FETCH_POSTS_QUERY } from "../../utils/graphql";
 import { AuthContext } from "../../context/auth";
+import { Link } from "react-router-dom";
 
 const DELETE_POST_MUTATION = gql`
   mutation DeletePost($postId: ID!) {
@@ -29,7 +30,7 @@ const LIKE_POST_MUTATION = gql`
   }
 `;
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, imageSrc }) => {
   const { userData } = useContext(AuthContext);
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
@@ -48,24 +49,22 @@ const PostCard = ({ post }) => {
 
   const [likePost] = useMutation(LIKE_POST_MUTATION, {
     variables: { postId: post.id },
-    update: (proxy, result) => {},
   });
   return (
     <>
       <Card fluid className='postCard'>
         <Card.Content>
-          <Image
-            floated='right'
-            size='mini'
-            src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg'
-          />
+          {imageSrc && <Image floated='right' size='mini' src={imageSrc} />}
           <Card.Header>{post.userName}</Card.Header>
-          <Card.Meta>{moment(post.createdAt).fromNow(true)}</Card.Meta>
+          <Card.Meta as={Link} to={`/posts/${post.id}`}>
+            {moment(post.createdAt).fromNow(true)}
+          </Card.Meta>
           <Card.Description>{post.body}</Card.Description>
         </Card.Content>
         <Card.Content extra>
           <Button as='div' labelPosition='right' onClick={likePost}>
-            {post.likes.find((like) => like.userName === userData.userName) ? (
+            {userData &&
+            post.likes.find((like) => like.userName === userData.userName) ? (
               <Button color='red'>
                 <Icon name='heart' />
               </Button>

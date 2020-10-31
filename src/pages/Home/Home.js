@@ -14,8 +14,8 @@ const Home = () => {
   return (
     <div className='home'>
       <Grid columns={3}>
-        <Grid.Row className='home__title'>
-          <h1>Recent Posts</h1>
+        <Grid.Row>
+          <h1 className='home__title'>Recent Posts</h1>
         </Grid.Row>
         <Grid.Row>
           {userData && (
@@ -29,7 +29,10 @@ const Home = () => {
             ) : (
               getPosts.map((post) => (
                 <Grid.Column key={post.id}>
-                  <PostCard post={post} />
+                  <PostCard
+                    post={post}
+                    imageSrc='https://react.semantic-ui.com/images/avatar/large/jenny.jpg'
+                  />
                 </Grid.Column>
               ))
             )}
