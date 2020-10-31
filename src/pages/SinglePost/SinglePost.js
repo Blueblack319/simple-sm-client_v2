@@ -33,12 +33,9 @@ const FETCH_POST_QUERY = gql`
 `;
 
 const SinglePost = (props) => {
-  const { loading, error, data: { getPost } = "" } = useQuery(
-    FETCH_POST_QUERY,
-    {
-      variables: { postId: props.match.params.postId },
-    }
-  );
+  const { data: { getPost } = "" } = useQuery(FETCH_POST_QUERY, {
+    variables: { postId: props.match.params.postId },
+  });
 
   return (
     <div className='singlePost'>
