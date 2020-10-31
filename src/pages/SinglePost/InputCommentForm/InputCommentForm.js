@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { gql, useMutation } from "@apollo/client";
 
@@ -30,6 +30,7 @@ const CREATE_COMMENT_MUTATION = gql`
 `;
 
 const InputComment = ({ postId }) => {
+  const inputRef = useRef(null);
   const { values, handleInputChanged, handleFormSubmitted } = useForm(
     {
       comment: "",
@@ -39,6 +40,10 @@ const InputComment = ({ postId }) => {
 
   const [createComment] = useMutation(CREATE_COMMENT_MUTATION, {
     variables: { postId, body: values.comment },
+    update: () => {
+      values.comment = "";
+      inputRef.current.blur();
+    },
   });
 
   function submitComment() {
@@ -48,16 +53,20 @@ const InputComment = ({ postId }) => {
   return (
     <Form onSubmit={handleFormSubmitted} className='inputCommentForm'>
       <h2>What do you think?</h2>
-      <Form.Input
-        type='text'
-        placeholder='Type..'
-        name='comment'
-        onChange={handleInputChanged}
-        value={values.comment}
-      />
-      <Button type='submit' color='teal' floated='right'>
-        Submit
-      </Button>
+      <div className='ui fluid input'>
+        <input
+          type='text'
+          placeholder='Type..'
+          name='comment'
+          value={values.comment}
+          onChange={handleInputChanged}
+          className='inputComment'
+          ref={inputRef}
+        />
+        <Button type='submit' color='teal' floated='right'>
+          Submit
+        </Button>
+      </div>
     </Form>
   );
 };

@@ -1,9 +1,8 @@
 import { useMutation, gql } from "@apollo/client";
-import React, { useContext, useState } from "react";
+import React from "react";
 import { Button, Card, Form, Message } from "semantic-ui-react";
 
 import "./PostForm.css";
-import { AuthContext } from "../../context/auth";
 import { useForm } from "../../utils/hooks";
 import { FETCH_POSTS_QUERY } from "../../utils/graphql";
 

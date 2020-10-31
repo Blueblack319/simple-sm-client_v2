@@ -77,7 +77,7 @@ const PostCard = ({ post, imageSrc }) => {
               {post.likesCount}
             </Label>
           </Button>
-          <Button as='div' labelPosition='right'>
+          <Button as={Link} labelPosition='right' to={`/posts/${post.id}`}>
             <Button basic color='blue'>
               <Icon name='comments' />
             </Button>

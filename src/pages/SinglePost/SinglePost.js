@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Grid, Image } from "semantic-ui-react";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import React from "react";
+import { Grid, Image, Transition } from "semantic-ui-react";
+import { gql, useQuery } from "@apollo/client";
 
 import "./SinglePost.css";
 
 import PostCard from "../../components/PostCard/PostCard";
 import InputCommentForm from "./InputCommentForm/InputCommentForm";
-import Comments from "./Comments/Comments";
+import Comment from "./Comment/Comment";
 
 const FETCH_POST_QUERY = gql`
   query GetPost($postId: ID!) {
@@ -53,7 +53,16 @@ const SinglePost = (props) => {
           <Grid.Column width={10}>
             <PostCard post={getPost} />
             <InputCommentForm postId={getPost.id} />
-            <Comments comments={getPost.comments} />
+            <Transition.Group duration={1000}>
+              {/* not Working */}
+              {getPost.comments.map((comment) => (
+                <Comment
+                  comment={comment}
+                  postId={getPost.id}
+                  key={comment.id}
+                />
+              ))}
+            </Transition.Group>
           </Grid.Column>
         </Grid>
       )}
