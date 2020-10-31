@@ -1,10 +1,11 @@
 import { useMutation, gql } from "@apollo/client";
 import React, { useContext, useState } from "react";
-import { Button, Card, Form } from "semantic-ui-react";
-import { AuthContext } from "../../context/auth";
-import { useForm } from "../../utils/hooks";
+import { Button, Card, Form, Message } from "semantic-ui-react";
 
 import "./PostForm.css";
+import { AuthContext } from "../../context/auth";
+import { useForm } from "../../utils/hooks";
+import { FETCH_POSTS_QUERY } from "../../utils/graphql";
 
 const CREATE_POST_MUTATION = gql`
   mutation CreatePost($body: String!) {
@@ -35,12 +36,17 @@ const PostForm = () => {
     { body: "" },
     addPost
   );
-  const [createPost, data] = useMutation(CREATE_POST_MUTATION, {
-    update(proxy, result) {
-      console.log(proxy, result);
-      console.log(data);
+  const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
+    update: (proxy, result) => {
+      const data = proxy.readQuery({ query: FETCH_POSTS_QUERY });
+      proxy.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: { getPosts: [result.data.createPost, ...data.getPosts] },
+      });
+      values.body = "";
     },
     variables: values,
+    onError: () => {},
   });
 
   function addPost() {
@@ -58,6 +64,8 @@ const PostForm = () => {
               placeholder='Type..'
               fluid
               onChange={handleInputChanged}
+              value={values.body}
+              name='body'
             />
             <Button type='submit' color='teal'>
               Submit
@@ -65,6 +73,9 @@ const PostForm = () => {
           </Form>
         </Card.Content>
       </Card>
+      {error && values.body === "" && (
+        <Message error header='Error!' list={[error.message]} />
+      )}
     </div>
   );
 };
