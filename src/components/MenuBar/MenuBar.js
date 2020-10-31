@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
@@ -9,6 +9,9 @@ const MenuBar = () => {
   const pathname = window.location.pathname;
   const path = pathname === "/" ? "home" : pathname.substring(1);
   const [activeItem, setActiveItem] = useState(path);
+  useEffect(() => {
+    setActiveItem(path);
+  }, [path]);
 
   const handleItemClicked = (e, { name }) => {
     setActiveItem(name);
@@ -24,7 +27,7 @@ const MenuBar = () => {
         to='/'
       />
       <Menu.Menu position='right'>
-        <Menu.Item name='logout' onClick={logout} as={Link} to='/signup' />
+        <Menu.Item name='logout' onClick={logout} as={Link} to='/' />
       </Menu.Menu>
     </Menu>
   ) : (
